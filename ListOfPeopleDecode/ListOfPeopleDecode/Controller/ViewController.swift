@@ -33,7 +33,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     //specifies the height (in points) that row should be
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 90
     }
     
     
