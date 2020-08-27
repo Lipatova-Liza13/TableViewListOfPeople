@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8328AFC924F7FD0200559D99 /* AddPersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328AFC824F7FD0200559D99 /* AddPersonViewController.swift */; };
 		8346E73F24F6AE5800520F77 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8346E73E24F6AE5800520F77 /* AppDelegate.swift */; };
 		8346E74124F6AE5800520F77 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8346E74024F6AE5800520F77 /* SceneDelegate.swift */; };
 		8346E74324F6AE5800520F77 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8346E74224F6AE5800520F77 /* ViewController.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8328AFC824F7FD0200559D99 /* AddPersonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPersonViewController.swift; sourceTree = "<group>"; };
 		8346E73B24F6AE5800520F77 /* ListOfPeopleDecode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ListOfPeopleDecode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8346E73E24F6AE5800520F77 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8346E74024F6AE5800520F77 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				8346E74224F6AE5800520F77 /* ViewController.swift */,
+				8328AFC824F7FD0200559D99 /* AddPersonViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 				8346E74324F6AE5800520F77 /* ViewController.swift in Sources */,
 				8346E73F24F6AE5800520F77 /* AppDelegate.swift in Sources */,
 				8346E74124F6AE5800520F77 /* SceneDelegate.swift in Sources */,
+				8328AFC924F7FD0200559D99 /* AddPersonViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
