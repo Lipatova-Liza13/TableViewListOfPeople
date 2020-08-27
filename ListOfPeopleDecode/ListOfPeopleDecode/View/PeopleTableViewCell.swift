@@ -9,16 +9,30 @@
 import UIKit
 
 class PeopleTableViewCell: UITableViewCell {
-
+    //MARK:Сonnect nib file
+    static let identifier = "PeopleTableViewCell"
+    
+    static func nib() -> UINib {
+        return UINib(nibName: "PeopleTableViewCell", bundle: nil)
+    }
+    //MARK:Properties
+    @IBOutlet weak var surname: UILabel!
+    
+    @IBOutlet weak var age: UILabel!
+    
+    @IBOutlet weak var name: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    var setPeople: People! {
+        didSet {
+            name.text = setPeople.first_name
+            surname.text = setPeople.last_name
+            age.text = setPeople.age
+        }
     }
 
 }

@@ -8,7 +8,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="74" id="gcN-un-xGF">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="74" id="gcN-un-xGF" customClass="PeopleTableViewCell" customModule="ListOfPeopleDecode" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="413" height="74"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gcN-un-xGF" id="i5X-cj-TAZ">
@@ -91,6 +91,11 @@
                     <constraint firstAttribute="trailing" secondItem="Yx7-nv-Nes" secondAttribute="trailing" constant="8" id="yFM-Gj-5xT"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="age" destination="Yx7-nv-Nes" id="FwF-ea-Xcn"/>
+                <outlet property="name" destination="lEu-mD-IlT" id="oho-Di-C9k"/>
+                <outlet property="surname" destination="SC7-kg-Rnv" id="Bt2-0z-rPR"/>
+            </connections>
             <point key="canvasLocation" x="123.91304347826087" y="52.901785714285715"/>
         </tableViewCell>
     </objects>
