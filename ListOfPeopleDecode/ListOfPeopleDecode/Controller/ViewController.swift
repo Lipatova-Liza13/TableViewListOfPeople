@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os.log
 
 class ViewController: UIViewController {
     var group = [People]()
@@ -15,7 +16,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadSampleItemsFromJSON()
+        
         PeopleTableView.register(PeopleTableViewCell.nib(), forCellReuseIdentifier: PeopleTableViewCell.identifier)
         
         PeopleTableView.tableFooterView = UIView()
@@ -23,7 +24,15 @@ class ViewController: UIViewController {
         // Use the edit button item provided by the table view controller.
         //hhelp us to edit view
         navigationItem.leftBarButtonItem = editButtonItem
-
+        
+        // Load any saved meals, otherwise load sample data.
+        if let savedPeople = loadPeople() {
+            group += savedPeople
+        }
+        else {
+            // Load the sample data.
+            loadSampleItemsFromJSON()
+        }
     }
 
 
@@ -56,10 +65,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == .delete {
             // Delete the row from the data source
             group.remove(at: indexPath.row)
+            savePeople()//save changes at global base
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
+
     }
     
     
@@ -67,6 +78,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
+    }
+    
+    private func savePeople() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(group, toFile: People.ArchiveURL.path)
+        
+        if isSuccessfulSave {
+            os_log("People successfully saved.", log: OSLog.default, type: .debug)
+        } else {
+            os_log("Failed to save people...", log: OSLog.default, type: .error)
+        }
     }
     
     private func loadSampleItemsFromJSON() {
@@ -104,11 +125,20 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    
+    private func loadPeople() -> [People]? {
+        return NSKeyedUnarchiver.unarchiveObject(withFile: People.ArchiveURL.path) as? [People]
+    }
+    
+    
        @IBAction func unwindToShopList(sender: UIStoryboardSegue) {
+        
            if let sourceViewController = sender.source as? AddPersonViewController, let person = sourceViewController.pers {
                // Add
                let newIndexPath = IndexPath(row: group.count, section: 0)
-               group.append(person)
+            group.append(person)
+            // Save the meals.
+            savePeople()
               PeopleTableView.insertRows(at: [newIndexPath], with: .automatic)//animation
            }
        }
