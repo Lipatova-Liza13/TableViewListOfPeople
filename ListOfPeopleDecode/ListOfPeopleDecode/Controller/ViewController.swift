@@ -9,7 +9,7 @@
 import UIKit
 import os.log
 
-class ViewController: UIViewController {
+ class ViewController: UIViewController {
     var group = [People]()
     //MARK:Properties
     @IBOutlet weak var PeopleTableView: UITableView!
@@ -59,7 +59,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.setPeople = group[indexPath.row]
         return cell
     }
-    
+    /*
     // Override to support editing the table view.
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
@@ -71,13 +71,30 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
 
+    }*/
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
+            -> UISwipeActionsConfiguration? {
+            let deleteAction = UIContextualAction(style: .destructive, title: nil) { (_, _, completionHandler) in
+
+                self.group.remove(at: indexPath.row)
+                self.savePeople()//save changes at global base
+                tableView.deleteRows(at: [indexPath], with: .fade);                completionHandler(true)
+            }
+            deleteAction.image = UIImage(systemName: "trash")
+            deleteAction.backgroundColor = .systemRed
+            let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+            return configuration
     }
-    
     
     // Override to support conditional editing of the table view.
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
-        return true
+        if self.isEditing{
+            return true
+        }
+        else {
+            return false
+        }
     }
     
     private func savePeople() {
