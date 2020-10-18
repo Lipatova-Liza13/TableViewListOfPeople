@@ -14,7 +14,6 @@ class People: NSObject, Codable, NSCoding {
     var last_name:String
     var age:String
     
-    
     //MARK: Archiving Paths
      
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!

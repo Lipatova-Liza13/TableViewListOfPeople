@@ -5,14 +5,36 @@
 //  Created by Teslenko Anastasiya on 26.08.2020.
 //  Copyright © 2020 Liza Lipatova. All rights reserved.
 //
+let url = URL(string: "https://api.themoviedb.org/3/movie/top_rated?api_key=0ff69c32b74d705c975bcd6fe072688a&language=en-US&page=1")!
 
+let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+    if error != nil {
+            print("The error is: \(error!)")
+            return
+    } else if let jsonData = data {
+            do {
+                let decoder = JSONDecoder()
+                let event = try decoder.decode(News.self, from: jsonData)
+                self.news.append(contentsOf: event.results)
+                DispatchQueue.main.async {
+                    self.newsTableView.reloadData()
+                }
+            } catch let error as NSError {
+              print(error)
+            }
+    }
+}
+task.resume()
 import UIKit
 import os.log
 
- class ViewController: UIViewController {
+class ViewController: UIViewController {
     var group = [People]()
     //MARK:Properties
     @IBOutlet weak var PeopleTableView: UITableView!
+    let searchController = UISearchController(searchResultsController: nil)
+    
+    var filteredPeople: [ People ] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,21 +55,40 @@ import os.log
             // Load the sample data.
             loadSampleItemsFromJSON()
         }
+        // 1
+        searchController.searchResultsUpdater = self
+        
+        // This is useful if you’re using another view controller for your searchResultsController. In this instance, you’ve set the current view to show the results, so you don’t want to obscure your view.
+        searchController.obscuresBackgroundDuringPresentation = false
+        // 3
+        searchController.searchBar.placeholder = "Search"
+        // 4
+        navigationItem.searchController = searchController
+        // 5
+        isModalInPresentation = true
     }
-
-
+    
+   private var isSearchBarEmpty: Bool {
+      return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    private var isFiltering: Bool{
+        return searchController.isActive && !isSearchBarEmpty
+    }
 }
-
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering {
+            return filteredPeople.count
+        }
         return group.count
     }
 
     
     //specifies the height (in points) that row should be
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90
+        return 134
     }
     
     
@@ -56,7 +97,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         //Create your cell using the table view's
         let cell = tableView.dequeueReusableCell(withIdentifier: PeopleTableViewCell.identifier, for: indexPath) as! PeopleTableViewCell
-        cell.setPeople = group[indexPath.row]
+        
+        var peopleForFilteredCell : People
+        if isFiltering {
+            cell.setPeople = filteredPeople[indexPath.row]
+        }
+        else{
+            cell.setPeople = group[indexPath.row]
+        }
         return cell
     }
     /*
@@ -110,25 +158,26 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     private func loadSampleItemsFromJSON() {
         
         let jsonString = """
-            [
-                {
-                    "first_name": "Arthur",
-                    "last_name": "Dent",
-                    "age": "23"
-                }, {
-                    "first_name": "Zaphod",
-                    "last_name": "Jolie",
-                    "age": "13"
-                }, {
-                    "first_name": "Marvin",
-                    "last_name": "Timberlake",
-                    "age": "45"
-                }, {
-                    "first_name": "Brad",
-                    "last_name": "Pitt",
-                    "age": "42"
-                }
-            ]
+        "page": 1,
+        "results":[
+            {
+                "first_name": "Arthur",
+                "last_name": "Dent",
+                "age": "23"
+            }, {
+                "first_name": "Zaphod",
+                "last_name": "Jolie",
+                "age": "13"
+            }, {
+                "first_name": "Marvin",
+                "last_name": "Timberlake",
+                "age": "45"
+            }, {
+                "first_name": "Brad",
+                "last_name": "Pitt",
+                "age": "42"
+            }
+        ]
         """
         let jasonData = jsonString.data(using: .utf8)!
         let usersInfo = try! JSONDecoder().decode([People].self, from: jasonData)
@@ -159,5 +208,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
               PeopleTableView.insertRows(at: [newIndexPath], with: .automatic)//animation
            }
        }
+    
 }
 
+extension ViewController : UISearchResultsUpdating{
+    func updateSearchResults(for searchController: UISearchController) {
+        filtredContentForSearchText(searchController.searchBar.text!)
+    }
+    
+    private func filtredContentForSearchText(_ searchText: String){
+        filteredPeople = group.filter({ (people : People) -> Bool in
+            return people.first_name.lowercased().contains(searchText.lowercased())
+        })
+        
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Pay Attention!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //after filtering you should reload data on your table view
+        PeopleTableView.reloadData()
+    }
+}
